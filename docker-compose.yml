@@ -1,0 +1,29 @@
+version: '3'
+services:
+  java-app:
+    build: .
+    environment:
+      - MONGO_HOST=mongodb
+      - MONGO_DB=moviemanagement
+    ports:
+      - '8080:8080'
+    restart: always
+    links:
+      - mongodb
+  mongodb:
+    image: mongo:3.2.4
+    restart: always
+    ports:
+      - '27017:27017'
+    volumes:
+       - mongodb_data:/data/db
+  mongo-express:
+    image: mongo-express
+    ports:
+      - '9090:8081'
+    depends_on:
+      - mongodb
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+volumes:
+    mongodb_data:
